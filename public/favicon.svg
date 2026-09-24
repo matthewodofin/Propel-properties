@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="14" fill="#FFFFFF"/>
+  <!-- Blue Roof & Foundation -->
+  <path d="M12 40L32 18L44 30L34 40H12Z" fill="#016DAA"/>
+  <!-- Red Dynamic Crest -->
+  <path d="M32 18L44 6L56 18L48 26L44 22L40 26L32 18Z" fill="#E5322E"/>
+  <!-- Blue Support Base -->
+  <path d="M16 45H52L44 54H8L16 45Z" fill="#016DAA"/>
+  <circle cx="44" cy="6" r="3" fill="#E5322E"/>
+</svg>

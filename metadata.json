@@ -1,0 +1,6 @@
+{
+  "name": "Learnit Properties",
+  "description": "Learnit Properties helps you discover quality residential, commercial, land and investment properties in Nigeria.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
