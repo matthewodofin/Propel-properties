@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Property, PropertyEnquiryData } from '../types';
 import { X, CheckCircle2, Calendar, Phone, Mail, User, AlertCircle, Loader2 } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
@@ -15,8 +16,6 @@ export const PropertyEnquiryModal: React.FC<PropertyEnquiryModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  if (!isOpen) return null;
-
   const [formData, setFormData] = useState<PropertyEnquiryData>({
     fullName: '',
     email: '',
@@ -109,18 +108,36 @@ export const PropertyEnquiryModal: React.FC<PropertyEnquiryModalProps> = ({
   };
 
   return (
-    <div
-      id="property-enquiry-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/75 backdrop-blur-sm overflow-y-auto animate-in fade-in duration-200"
-    >
-      <div className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-2xl border border-gray-100 relative max-h-[92dvh] overflow-y-auto overscroll-contain">
-        <button
-          onClick={handleReset}
-          className="absolute top-4 right-4 p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors min-w-[40px] min-h-[40px] flex items-center justify-center"
-          aria-label="Close form"
+    <AnimatePresence>
+      {isOpen && (
+        <div
+          id="property-enquiry-modal"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6"
         >
-          <X className="w-5 h-5" />
-        </button>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleReset}
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm"
+          />
+
+          {/* Modal Container */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.94, y: 16 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+            className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-2xl border border-gray-100 relative max-h-[92dvh] overflow-y-auto overscroll-contain z-10"
+          >
+            <button
+              onClick={handleReset}
+              className="absolute top-4 right-4 p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors min-w-[40px] min-h-[40px] flex items-center justify-center cursor-pointer"
+              aria-label="Close form"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
         {success ? (
           <div className="text-center py-6 space-y-4 animate-in zoom-in-95 duration-200" id="enquiry-success-message">
@@ -263,11 +280,13 @@ export const PropertyEnquiryModal: React.FC<PropertyEnquiryModalProps> = ({
                 ></textarea>
               </div>
 
-              <button
+              <motion.button
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.96 }}
                 type="submit"
                 disabled={loading}
                 id="submit-property-enquiry-button"
-                className="w-full py-3.5 px-4 rounded-xl bg-[#E5322E] hover:bg-[#CC2622] text-white text-sm font-bold shadow-md transition-all active:scale-95 disabled:opacity-70 flex items-center justify-center gap-2"
+                className="w-full py-3.5 px-4 rounded-xl bg-[#E5322E] hover:bg-[#CC2622] text-white text-sm font-bold shadow-md transition-colors disabled:opacity-70 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {loading ? (
                   <>
@@ -277,11 +296,13 @@ export const PropertyEnquiryModal: React.FC<PropertyEnquiryModalProps> = ({
                 ) : (
                   <span>Request Property Information</span>
                 )}
-              </button>
+              </motion.button>
             </form>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
+  )}
+</AnimatePresence>
   );
 };

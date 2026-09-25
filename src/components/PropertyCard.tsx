@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { MapPin, Bed, Bath, Maximize2, ShieldCheck, ArrowUpRight, Phone, MessageSquare } from 'lucide-react';
 import { Property } from '../types';
 import { BUSINESS_INFO } from '../data/content';
@@ -34,9 +35,15 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   const isList = layout === 'list';
 
   return (
-    <article
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       id={`property-card-${property.id}`}
-      className={`group bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col ${
+      className={`group bg-white rounded-2xl border border-gray-200/90 overflow-hidden shadow-sm hover:shadow-xl hover:border-[#016DAA]/30 transition-shadow duration-300 flex flex-col ${
         isList ? 'md:flex-row' : ''
       }`}
     >
@@ -46,8 +53,11 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           src={property.images[0]}
           alt={property.title}
           loading="lazy"
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
+          className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-700 ease-out"
         />
+
+        {/* Ambient Subtle Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 
         {/* Status Badge */}
         <div className="absolute top-3 left-3 z-10 flex flex-wrap gap-1.5">
@@ -92,7 +102,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           {/* Title */}
           <h3
             onClick={() => onViewDetails(property)}
-            className="text-lg font-bold text-[#1F2937] hover:text-[#016DAA] transition-colors line-clamp-2 cursor-pointer mb-3 leading-snug"
+            className="text-lg font-bold text-[#1F2937] group-hover:text-[#016DAA] transition-colors line-clamp-2 cursor-pointer mb-3 leading-snug"
           >
             {property.title}
           </h3>
@@ -142,17 +152,20 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 
         {/* Card Footer: Action Buttons with Accessible Tap Targets */}
         <div className="pt-2 flex items-center justify-between gap-2.5 sm:gap-3">
-          <button
+          <motion.button
+            whileTap={{ scale: 0.96 }}
             onClick={() => onViewDetails(property)}
             id={`view-prop-btn-${property.id}`}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#016DAA] hover:bg-[#015383] text-white text-xs sm:text-sm font-bold shadow-sm transition-all duration-200 active:scale-95 min-h-[44px]"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-[#016DAA] hover:bg-[#015383] text-white text-xs sm:text-sm font-bold shadow-sm transition-colors min-h-[44px] cursor-pointer"
           >
             <span>View Property</span>
-            <ArrowUpRight className="w-4 h-4" />
-          </button>
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </motion.button>
 
           {/* Quick WhatsApp Inquiry */}
-          <a
+          <motion.a
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.94 }}
             href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
               `Hello Propel Properties, I am interested in: ${property.title} (${property.priceFormatted}) in ${property.area}. Please share more details.`
             )}`}
@@ -160,12 +173,12 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             rel="noopener noreferrer"
             title="Inquire via WhatsApp"
             aria-label={`Inquire about ${property.title} on WhatsApp`}
-            className="p-2.5 sm:p-3 rounded-xl border border-emerald-500/30 text-emerald-600 hover:bg-emerald-50 active:bg-emerald-100 transition-colors flex items-center justify-center min-w-[44px] min-h-[44px] flex-shrink-0"
+            className="p-2.5 sm:p-3 rounded-xl border border-emerald-500/30 text-emerald-600 hover:bg-emerald-50 active:bg-emerald-100 transition-colors flex items-center justify-center min-w-[44px] min-h-[44px] flex-shrink-0 cursor-pointer"
           >
             <MessageSquare className="w-4 h-4" />
-          </a>
+          </motion.a>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 };

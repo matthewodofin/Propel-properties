@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { INSIGHTS_ARTICLES } from '../data/content';
 import { InsightArticle } from '../types';
 import { Calendar, Clock, ArrowRight, X, BookOpen, Share2 } from 'lucide-react';
@@ -7,34 +8,47 @@ export const InsightsSection: React.FC = () => {
   const [activeArticle, setActiveArticle] = useState<InsightArticle | null>(null);
 
   return (
-    <section id="insights" className="py-20 bg-gray-50/60 border-t border-gray-100">
+    <section id="insights" className="py-20 sm:py-24 bg-gray-50/60 border-t border-gray-100 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-block px-3 py-1 rounded-full bg-[#F0F7FB] text-[#016DAA] text-xs font-bold uppercase tracking-wider mb-3">
+        {/* Section Header with Scroll-in-view */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
+          <span className="inline-block px-3.5 py-1.5 rounded-full bg-[#F0F7FB] text-[#016DAA] text-xs font-bold uppercase tracking-wider mb-3">
             Market Knowledge &amp; Guidance
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1F2937] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1F2937] tracking-tight">
             Real Estate Insights
           </h2>
-          <p className="mt-4 text-base sm:text-lg text-gray-600">
+          <p className="mt-4 text-base sm:text-lg text-gray-600 leading-relaxed">
             Expert advisory, legal frameworks, and investment strategies to guide your Nigerian property decisions.
           </p>
-        </div>
+        </motion.div>
 
+        {/* Articles Grid with Staggered Entrance */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {INSIGHTS_ARTICLES.map((article) => (
-            <article
+          {INSIGHTS_ARTICLES.map((article, idx) => (
+            <motion.article
               key={article.id}
-              className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group"
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, delay: idx * 0.12 }}
+              whileHover={{ y: -6 }}
+              className="bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between group"
             >
               <div>
-                {/* Article Image */}
+                {/* Article Image with Zoom on Card Hover */}
                 <div className="relative h-52 overflow-hidden bg-gray-100">
                   <img
                     src={article.image}
                     alt={article.title}
                     loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
                   />
                   <div className="absolute top-3 left-3">
                     <span className="px-3 py-1 rounded-md text-xs font-bold bg-white/95 backdrop-blur-md text-[#016DAA] shadow-sm">
@@ -71,73 +85,95 @@ export const InsightsSection: React.FC = () => {
 
               {/* Read More Action */}
               <div className="px-6 pb-6 pt-2">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="button"
                   onClick={() => setActiveArticle(article)}
                   id={`read-article-${article.id}`}
-                  className="w-full inline-flex items-center justify-between py-2.5 px-4 rounded-xl bg-gray-50 hover:bg-[#F0F7FB] text-[#016DAA] font-bold text-xs sm:text-sm transition-colors border border-gray-100"
+                  className="w-full inline-flex items-center justify-between py-2.5 px-4 rounded-xl bg-gray-50 hover:bg-[#F0F7FB] text-[#016DAA] font-bold text-xs sm:text-sm transition-colors border border-gray-100 cursor-pointer"
                 >
                   <span>Read Full Article</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </div>
 
-      {/* Article Reader Modal */}
-      {activeArticle && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-100 relative">
-            {/* Modal Header Bar */}
-            <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <span className="text-xs font-bold text-[#016DAA] uppercase tracking-wider">
-                {activeArticle.category} • {activeArticle.readTime}
-              </span>
-              <button
-                onClick={() => setActiveArticle(null)}
-                className="p-1.5 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-                aria-label="Close article"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      {/* Article Reader Modal with AnimatePresence */}
+      <AnimatePresence>
+        {activeArticle && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveArticle(null)}
+              className="fixed inset-0 bg-black/75 backdrop-blur-sm"
+            />
 
-            <div className="p-6 sm:p-8">
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1F2937] mb-4 leading-tight">
-                {activeArticle.title}
-              </h2>
-
-              <img
-                src={activeArticle.image}
-                alt={activeArticle.title}
-                className="w-full h-64 object-cover rounded-2xl mb-6 shadow-sm"
-              />
-
-              <div className="prose max-w-none text-gray-700 space-y-4 text-sm sm:text-base leading-relaxed">
-                {activeArticle.content.map((paragraph, idx) => (
-                  <div key={idx} className="p-4 bg-gray-50 rounded-xl border border-gray-100">
-                    <p className="font-medium text-gray-800">{paragraph}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-xs text-gray-500">
-                  Published by <strong className="text-[#016DAA]">Propel Properties Advisory Team</strong>
-                </div>
+            {/* Modal Dialog */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+              className="bg-white rounded-3xl max-w-2xl w-full max-h-[92dvh] overflow-y-auto shadow-2xl border border-gray-100 relative z-10 overscroll-contain"
+            >
+              {/* Modal Header Bar */}
+              <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <span className="text-xs font-bold text-[#016DAA] uppercase tracking-wider">
+                  {activeArticle.category} • {activeArticle.readTime}
+                </span>
                 <button
                   onClick={() => setActiveArticle(null)}
-                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#016DAA] text-white text-xs sm:text-sm font-bold shadow-sm"
+                  className="p-1.5 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer"
+                  aria-label="Close article"
                 >
-                  Close Article
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            </div>
+
+              <div className="p-6 sm:p-8">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1F2937] mb-4 leading-tight">
+                  {activeArticle.title}
+                </h2>
+
+                <img
+                  src={activeArticle.image}
+                  alt={activeArticle.title}
+                  className="w-full h-64 object-cover rounded-2xl mb-6 shadow-sm"
+                />
+
+                <div className="prose max-w-none text-gray-700 space-y-4 text-sm sm:text-base leading-relaxed">
+                  {activeArticle.content.map((paragraph, idx) => (
+                    <div key={idx} className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                      <p className="font-medium text-gray-800">{paragraph}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div className="text-xs text-gray-500">
+                    Published by <strong className="text-[#016DAA]">Propel Properties Advisory Team</strong>
+                  </div>
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => setActiveArticle(null)}
+                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#016DAA] hover:bg-[#015383] text-white text-xs sm:text-sm font-bold shadow-sm transition-colors cursor-pointer"
+                  >
+                    Close Article
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </section>
   );
 };

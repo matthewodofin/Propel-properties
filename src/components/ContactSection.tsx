@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { BUSINESS_INFO } from '../data/content';
 import { ContactFormData } from '../types';
 import { submitToFormspree } from '../services/formspree';
@@ -153,10 +154,16 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   };
 
   return (
-    <section id="contact" className="py-20 bg-white">
+    <section id="contact" className="py-20 sm:py-24 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Title */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        {/* Section Title with Scroll-in-view */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-3xl mx-auto mb-16"
+        >
           <span className="inline-block px-3 py-1 rounded-full bg-[#F0F7FB] text-[#016DAA] text-xs font-bold uppercase tracking-wider mb-3">
             Get In Touch
           </span>
@@ -166,11 +173,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           <p className="mt-4 text-base sm:text-lg text-gray-600">
             Have questions about a property, land opportunities, or listing your real estate? Our advisory team is ready to guide you.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Left Column: Business Details Cards (Section 15) */}
-          <div className="lg:col-span-5 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: -25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-5 space-y-6"
+          >
             <div className="bg-[#016DAA] text-white rounded-3xl p-8 shadow-xl relative overflow-hidden">
               <div className="relative z-10 space-y-6">
                 <div>
@@ -227,45 +240,53 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   </div>
                 </div>
 
-                {/* Section 15 Required Direct Action Buttons */}
+                {/* Section 15 Required Direct Action Buttons with tactile motion */}
                 <div className="pt-4 space-y-3 border-t border-white/20">
-                  <a
+                  <motion.a
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     href={BUSINESS_INFO.phoneTel}
                     id="contact-call-button"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white text-[#016DAA] hover:bg-sky-50 font-bold text-sm shadow-md transition-all active:scale-95"
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white text-[#016DAA] hover:bg-sky-50 font-bold text-sm shadow-md transition-colors"
                   >
                     <Phone className="w-4 h-4" />
                     <span>Call Propel Properties</span>
-                  </a>
+                  </motion.a>
 
-                  <a
+                  <motion.a
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     href={BUSINESS_INFO.emailMailto}
                     id="contact-email-button"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white/15 hover:bg-white/25 text-white border border-white/30 font-semibold text-sm transition-all active:scale-95"
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white/15 hover:bg-white/25 text-white border border-white/30 font-semibold text-sm transition-colors"
                   >
                     <Mail className="w-4 h-4" />
                     <span>Email Us</span>
-                  </a>
+                  </motion.a>
 
-                  <a
+                  <motion.a
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     href={BUSINESS_INFO.whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     id="contact-whatsapp-direct"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-md transition-all active:scale-95"
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-md transition-colors"
                   >
                     <MessageSquare className="w-4 h-4" />
                     <span>Chat With Us on WhatsApp</span>
-                  </a>
+                  </motion.a>
 
-                  <a
+                  <motion.a
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     href="#office-location-map"
                     id="contact-view-map-button"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-sm transition-all active:scale-95"
+                    className="w-full inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-sm transition-colors"
                   >
                     <Navigation className="w-4 h-4 text-sky-200" />
                     <span>View Map &amp; Directions</span>
-                  </a>
+                  </motion.a>
                 </div>
               </div>
 
@@ -285,7 +306,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 <button
                   type="button"
                   onClick={onOpenBackendConfig}
-                  className="flex items-center gap-1 font-bold text-[#016DAA] hover:underline"
+                  className="flex items-center gap-1 font-bold text-[#016DAA] hover:underline cursor-pointer"
                   title="View backend configuration options"
                 >
                   <Settings className="w-3.5 h-3.5" />
@@ -293,10 +314,16 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                 </button>
               )}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right Column: Prominent Contact Form (Section 16 & 17) */}
-          <div className="lg:col-span-7 bg-white p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-xl">
+          {/* Right Column: Prominent Contact Form with motion */}
+          <motion.div
+            initial={{ opacity: 0, x: 25 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-7 bg-white p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-gray-200 shadow-xl shadow-slate-900/5"
+          >
             <div className="mb-6">
               <span className="text-xs font-bold text-[#016DAA] uppercase tracking-wider block">
                 Direct Communication
@@ -469,11 +496,13 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
                 {/* Submit Button (Section 16: "Send Message") */}
                 <div className="pt-2">
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
                     type="submit"
                     disabled={loading}
                     id="submit-contact-form-button"
-                    className="w-full py-4 px-6 rounded-xl bg-[#E5322E] hover:bg-[#CC2622] text-white font-bold text-base shadow-md hover:shadow-lg transition-all active:scale-[0.98] disabled:opacity-70 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E5322E]"
+                    className="w-full py-4 px-6 rounded-xl bg-[#E5322E] hover:bg-[#CC2622] text-white font-bold text-base shadow-md hover:shadow-lg transition-all disabled:opacity-70 flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E5322E] cursor-pointer"
                   >
                     {loading ? (
                       <>
@@ -486,15 +515,22 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                         <span>Send Message</span>
                       </>
                     )}
-                  </button>
+                  </motion.button>
                 </div>
               </form>
             )}
-          </div>
+          </motion.div>
         </div>
 
-        {/* Interactive Google Map Section */}
-        <div className="mt-14 bg-white rounded-3xl border border-gray-200 shadow-xl overflow-hidden" id="office-location-map">
+        {/* Interactive Google Map Section with motion entrance */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.6 }}
+          className="mt-14 bg-white rounded-3xl border border-gray-200 shadow-xl overflow-hidden"
+          id="office-location-map"
+        >
           <div className="p-6 sm:p-8 bg-gradient-to-r from-gray-50 via-white to-sky-50 border-b border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-start sm:items-center gap-3.5">
               <div className="w-12 h-12 rounded-2xl bg-[#016DAA] text-white flex items-center justify-center flex-shrink-0 shadow-md">
@@ -562,7 +598,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

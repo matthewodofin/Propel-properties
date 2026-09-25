@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Logo } from './Logo';
 import { Phone, MessageSquare, Menu, X, PlusCircle } from 'lucide-react';
 import { BUSINESS_INFO } from '../data/content';
@@ -162,133 +163,143 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Right Action: List Your Property CTA Button */}
           <div className="hidden sm:flex items-center gap-3">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.96 }}
               onClick={handleOpenList}
               id="nav-list-property-button"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#E5322E] hover:bg-[#CC2622] text-white text-sm font-semibold shadow-sm transition-all duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E5322E]"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#E5322E] hover:bg-[#CC2622] text-white text-sm font-semibold shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#E5322E] cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
               <span>List Your Property</span>
-            </button>
+            </motion.button>
           </div>
 
           {/* Mobile Hamburger Button */}
           <div className="flex md:hidden items-center gap-1.5 sm:gap-2">
-            <button
+            <motion.button
+              whileTap={{ scale: 0.95 }}
               onClick={handleOpenList}
               id="mobile-nav-list-button"
-              className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-[#E5322E] active:bg-[#CC2622] text-white text-xs font-semibold shadow-xs flex-shrink-0"
+              className="px-2.5 sm:px-3 py-1.5 rounded-lg bg-[#E5322E] active:bg-[#CC2622] text-white text-xs font-semibold shadow-xs flex-shrink-0 cursor-pointer"
             >
               List Property
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.92 }}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               id="mobile-menu-toggle-button"
-              className="p-2 rounded-lg text-[#1F2937] hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#016DAA] min-w-[40px] min-h-[40px] flex items-center justify-center"
+              className="p-2 rounded-lg text-[#1F2937] hover:bg-gray-100 active:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-[#016DAA] min-w-[40px] min-h-[40px] flex items-center justify-center cursor-pointer"
               aria-label="Toggle Navigation Menu"
               aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation Drawer with Responsive Scroll & Active States */}
-      {mobileMenuOpen && (
-        <div
-          id="mobile-nav-drawer"
-          className="md:hidden border-t border-gray-100 bg-white px-4 pt-3 pb-8 space-y-3 shadow-2xl max-h-[calc(100dvh-4.5rem)] overflow-y-auto animate-in slide-in-from-top-2 duration-200"
-        >
-          {/* Mobile Drawer Brand Header with ample breathing room */}
-          <div className="flex items-center justify-between pb-3.5 mb-2 border-b border-gray-100">
-            <Logo size="sm" />
-            <span className="text-[11px] font-bold text-[#016DAA] bg-[#F0F7FB] px-2.5 py-1 rounded-full uppercase tracking-wider">
-              Navigation
-            </span>
-          </div>
+      {/* Mobile Navigation Drawer with AnimatePresence */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            id="mobile-nav-drawer"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden border-t border-gray-100 bg-white px-4 pt-3 pb-8 space-y-3 shadow-2xl max-h-[calc(100dvh-4.5rem)] overflow-y-auto"
+          >
+            {/* Mobile Drawer Brand Header with ample breathing room */}
+            <div className="flex items-center justify-between pb-3.5 mb-2 border-b border-gray-100">
+              <Logo size="sm" />
+              <span className="text-[11px] font-bold text-[#016DAA] bg-[#F0F7FB] px-2.5 py-1 rounded-full uppercase tracking-wider">
+                Navigation
+              </span>
+            </div>
 
-          <div className="space-y-1.5 pt-1">
-            <button
-              onClick={() => handleNavClick('home')}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between ${
-                currentView === 'home'
-                  ? 'bg-[#F0F7FB] text-[#016DAA] font-bold'
-                  : 'text-[#1F2937] hover:bg-gray-50'
-              }`}
-            >
-              <span>Home</span>
-              {currentView === 'home' && <span className="w-2 h-2 rounded-full bg-[#016DAA]"></span>}
-            </button>
-            <button
-              onClick={() => handleNavClick('home', 'about-us')}
-              className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1F2937] hover:bg-[#F0F7FB] hover:text-[#016DAA] transition-colors"
-            >
-              About Us
-            </button>
-            <button
-              onClick={() => handleNavClick('properties')}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between ${
-                currentView === 'properties'
-                  ? 'bg-[#F0F7FB] text-[#016DAA] font-bold'
-                  : 'text-[#1F2937] hover:bg-gray-50'
-              }`}
-            >
-              <span>Explore Properties</span>
-              {currentView === 'properties' && <span className="w-2 h-2 rounded-full bg-[#016DAA]"></span>}
-            </button>
-            <button
-              onClick={() => handleNavClick('home', 'services')}
-              className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1F2937] hover:bg-[#F0F7FB] hover:text-[#016DAA] transition-colors"
-            >
-              Services
-            </button>
-            <button
-              onClick={() => handleNavClick('home', 'why-choose-us')}
-              className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1F2937] hover:bg-[#F0F7FB] hover:text-[#016DAA] transition-colors"
-            >
-              Why Choose Us
-            </button>
-            <button
-              onClick={() => handleNavClick('home', 'testimonials')}
-              className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1F2937] hover:bg-[#F0F7FB] hover:text-[#016DAA] flex items-center justify-between transition-colors"
-            >
-              <span>Testimonies &amp; Reviews</span>
-              <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold">4.9 ★</span>
-            </button>
-            <button
-              onClick={() => handleNavClick('contact')}
-              className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between ${
-                currentView === 'contact'
-                  ? 'bg-[#F0F7FB] text-[#016DAA] font-bold'
-                  : 'text-[#1F2937] hover:bg-gray-50'
-              }`}
-            >
-              <span>Contact Us</span>
-              {currentView === 'contact' && <span className="w-2 h-2 rounded-full bg-[#016DAA]"></span>}
-            </button>
-          </div>
+            <div className="space-y-1.5 pt-1">
+              <button
+                onClick={() => handleNavClick('home')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between cursor-pointer ${
+                  currentView === 'home'
+                    ? 'bg-[#F0F7FB] text-[#016DAA] font-bold'
+                    : 'text-[#1F2937] hover:bg-gray-50'
+                }`}
+              >
+                <span>Home</span>
+                {currentView === 'home' && <span className="w-2 h-2 rounded-full bg-[#016DAA]"></span>}
+              </button>
+              <button
+                onClick={() => handleNavClick('home', 'about-us')}
+                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1F2937] hover:bg-[#F0F7FB] hover:text-[#016DAA] transition-colors cursor-pointer"
+              >
+                About Us
+              </button>
+              <button
+                onClick={() => handleNavClick('properties')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between cursor-pointer ${
+                  currentView === 'properties'
+                    ? 'bg-[#F0F7FB] text-[#016DAA] font-bold'
+                    : 'text-[#1F2937] hover:bg-gray-50'
+                }`}
+              >
+                <span>Explore Properties</span>
+                {currentView === 'properties' && <span className="w-2 h-2 rounded-full bg-[#016DAA]"></span>}
+              </button>
+              <button
+                onClick={() => handleNavClick('home', 'services')}
+                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1F2937] hover:bg-[#F0F7FB] hover:text-[#016DAA] transition-colors cursor-pointer"
+              >
+                Services
+              </button>
+              <button
+                onClick={() => handleNavClick('home', 'why-choose-us')}
+                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1F2937] hover:bg-[#F0F7FB] hover:text-[#016DAA] transition-colors cursor-pointer"
+              >
+                Why Choose Us
+              </button>
+              <button
+                onClick={() => handleNavClick('home', 'testimonials')}
+                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#1F2937] hover:bg-[#F0F7FB] hover:text-[#016DAA] flex items-center justify-between transition-colors cursor-pointer"
+              >
+                <span>Testimonies &amp; Reviews</span>
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold">4.9 ★</span>
+              </button>
+              <button
+                onClick={() => handleNavClick('contact')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between cursor-pointer ${
+                  currentView === 'contact'
+                    ? 'bg-[#F0F7FB] text-[#016DAA] font-bold'
+                    : 'text-[#1F2937] hover:bg-gray-50'
+                }`}
+              >
+                <span>Contact Us</span>
+                {currentView === 'contact' && <span className="w-2 h-2 rounded-full bg-[#016DAA]"></span>}
+              </button>
+            </div>
 
-          <div className="pt-3 border-t border-gray-100 space-y-2">
-            <a
-              href={BUSINESS_INFO.phoneTel}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#016DAA] text-white text-sm font-bold active:scale-[0.98] transition-transform"
-            >
-              <Phone className="w-4 h-4" />
-              <span>Call {BUSINESS_INFO.phone}</span>
-            </a>
-            <a
-              href={BUSINESS_INFO.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-600 text-white text-sm font-bold active:scale-[0.98] transition-transform"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp Chat</span>
-            </a>
-          </div>
-        </div>
-      )}
+            <div className="pt-4 border-t border-gray-100 space-y-2">
+              <a
+                href={BUSINESS_INFO.phoneTel}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#016DAA] text-white text-sm font-bold active:scale-[0.98] transition-transform cursor-pointer"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Call {BUSINESS_INFO.phone}</span>
+              </a>
+              <a
+                href={BUSINESS_INFO.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-600 text-white text-sm font-bold active:scale-[0.98] transition-transform cursor-pointer"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>WhatsApp Chat</span>
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

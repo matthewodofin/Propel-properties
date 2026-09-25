@@ -7,6 +7,7 @@ import { AboutSection } from './components/AboutSection';
 import { ServicesSection } from './components/ServicesSection';
 import { WhyChooseUs } from './components/WhyChooseUs';
 import { HowItWorks } from './components/HowItWorks';
+import { InvestmentCalculator } from './components/InvestmentCalculator';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { InsightsSection } from './components/InsightsSection';
 import { ContactSection } from './components/ContactSection';
@@ -125,103 +126,146 @@ export default function App() {
 
       {/* Main Page Content */}
       <main className="flex-grow">
-        {currentView === 'home' && (
-          <>
-            {/* Hero Section with Search Box */}
-            <Hero
-              onExploreProperties={() => handleNavigate('properties')}
-              onContactAgent={() => handleNavigate('contact')}
-              onSearch={handleSearch}
-            />
+        <AnimatePresence mode="wait">
+          {currentView === 'home' && (
+            <motion.div
+              key="home-view"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+            >
+              {/* Hero Section with Search Box */}
+              <Hero
+                onExploreProperties={() => handleNavigate('properties')}
+                onContactAgent={() => handleNavigate('contact')}
+                onSearch={handleSearch}
+              />
 
-            {/* Featured Properties Section */}
-            <FeaturedProperties
-              properties={properties}
-              onViewDetails={handleViewPropertyDetails}
-              onEnquire={handleOpenEnquiry}
-              onViewAll={() => handleNavigate('properties')}
-            />
+              {/* Featured Properties Section */}
+              <FeaturedProperties
+                properties={properties}
+                onViewDetails={handleViewPropertyDetails}
+                onEnquire={handleOpenEnquiry}
+                onViewAll={() => handleNavigate('properties')}
+              />
 
-            {/* About Section */}
-            <AboutSection
-              onLearnMore={() => handleNavigate('about')}
-              onContactUs={() => handleNavigate('contact')}
-            />
+              {/* About Section */}
+              <AboutSection
+                onLearnMore={() => handleNavigate('about')}
+                onContactUs={() => handleNavigate('contact')}
+              />
 
-            {/* Services Section */}
-            <ServicesSection
-              onSelectServiceForEnquiry={handleServiceEnquiry}
-            />
+              {/* Services Section */}
+              <ServicesSection
+                onSelectServiceForEnquiry={handleServiceEnquiry}
+              />
 
-            {/* Why Choose Us */}
-            <WhyChooseUs />
+              {/* Why Choose Us */}
+              <WhyChooseUs />
 
-            {/* How It Works */}
-            <HowItWorks
-              onStartJourney={() => handleNavigate('properties')}
-            />
+              {/* How It Works */}
+              <HowItWorks
+                onStartJourney={() => handleNavigate('properties')}
+              />
 
-            {/* Client Testimonials */}
-            <TestimonialsSection
-              onExploreProperties={() => handleNavigate('properties')}
-              onContactAdvisor={() => handleNavigate('contact')}
-            />
+              {/* Interactive ROI & Yield Investment Calculator */}
+              <InvestmentCalculator
+                onExploreProperties={() => handleNavigate('properties')}
+                onContactAdvisor={() => handleNavigate('contact')}
+              />
 
-            {/* News & Real Estate Insights */}
-            <InsightsSection />
+              {/* Client Testimonials */}
+              <TestimonialsSection
+                onExploreProperties={() => handleNavigate('properties')}
+                onContactAdvisor={() => handleNavigate('contact')}
+              />
 
-            {/* Contact Section */}
-            <ContactSection
-              initialSubject={contactSubject}
-              initialProperty={contactProperty}
-              onOpenBackendConfig={() => setIsBackendConfigModalOpen(true)}
-            />
-          </>
-        )}
+              {/* News & Real Estate Insights */}
+              <InsightsSection />
 
-        {currentView === 'properties' && (
-          <PropertiesPage
-            properties={properties}
-            onViewDetails={handleViewPropertyDetails}
-            onEnquire={handleOpenEnquiry}
-            initialFilters={propertiesFilter}
-          />
-        )}
+              {/* Contact Section */}
+              <ContactSection
+                initialSubject={contactSubject}
+                initialProperty={contactProperty}
+                onOpenBackendConfig={() => setIsBackendConfigModalOpen(true)}
+              />
+            </motion.div>
+          )}
 
-        {currentView === 'about' && (
-          <div className="py-8">
-            <AboutSection
-              onLearnMore={() => {}}
-              onContactUs={() => handleNavigate('contact')}
-            />
-            <WhyChooseUs />
-            <TestimonialsSection
-              onExploreProperties={() => handleNavigate('properties')}
-              onContactAdvisor={() => handleNavigate('contact')}
-            />
-          </div>
-        )}
+          {currentView === 'properties' && (
+            <motion.div
+              key="properties-view"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <PropertiesPage
+                properties={properties}
+                onViewDetails={handleViewPropertyDetails}
+                onEnquire={handleOpenEnquiry}
+                initialFilters={propertiesFilter}
+              />
+            </motion.div>
+          )}
 
-        {currentView === 'services' && (
-          <div className="py-8">
-            <ServicesSection
-              onSelectServiceForEnquiry={handleServiceEnquiry}
-            />
-            <HowItWorks
-              onStartJourney={() => handleNavigate('contact')}
-            />
-          </div>
-        )}
+          {currentView === 'about' && (
+            <motion.div
+              key="about-view"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="py-8"
+            >
+              <AboutSection
+                onLearnMore={() => {}}
+                onContactUs={() => handleNavigate('contact')}
+              />
+              <WhyChooseUs />
+              <TestimonialsSection
+                onExploreProperties={() => handleNavigate('properties')}
+                onContactAdvisor={() => handleNavigate('contact')}
+              />
+            </motion.div>
+          )}
 
-        {currentView === 'contact' && (
-          <div className="py-8">
-            <ContactSection
-              initialSubject={contactSubject}
-              initialProperty={contactProperty}
-              onOpenBackendConfig={() => setIsBackendConfigModalOpen(true)}
-            />
-          </div>
-        )}
+          {currentView === 'services' && (
+            <motion.div
+              key="services-view"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="py-8"
+            >
+              <ServicesSection
+                onSelectServiceForEnquiry={handleServiceEnquiry}
+              />
+              <HowItWorks
+                onStartJourney={() => handleNavigate('contact')}
+              />
+            </motion.div>
+          )}
+
+          {currentView === 'contact' && (
+            <motion.div
+              key="contact-view"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="py-8"
+            >
+              <ContactSection
+                initialSubject={contactSubject}
+                initialProperty={contactProperty}
+                onOpenBackendConfig={() => setIsBackendConfigModalOpen(true)}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
 
       {/* Comprehensive Site Footer */}

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Property, PropertyFilterState } from '../types';
 import { PropertyCard } from './PropertyCard';
 import {
@@ -126,7 +127,12 @@ export const PropertiesPage: React.FC<PropertiesPageProps> = ({
     <div id="properties-page" className="py-12 bg-gray-50/50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Title & Intro */}
-        <div className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
           <span className="text-xs font-bold text-[#016DAA] uppercase tracking-wider block mb-1">
             Premium Nigerian Portfolio
           </span>
@@ -136,10 +142,15 @@ export const PropertiesPage: React.FC<PropertiesPageProps> = ({
           <p className="mt-2 text-base text-gray-600 max-w-2xl">
             Browse our comprehensive inventory of luxury duplexes, modern apartments, verified dry estate lands, and prime commercial investments across Lagos, Abuja, and Port Harcourt.
           </p>
-        </div>
+        </motion.div>
 
         {/* Filter Bar Container */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-sm border border-gray-200 mb-8 space-y-4">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-sm border border-gray-200 mb-8 space-y-4"
+        >
           {/* Top Row: Search input + View switchers */}
           <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
             <div className="relative w-full sm:max-w-md">
@@ -293,14 +304,14 @@ export const PropertiesPage: React.FC<PropertiesPageProps> = ({
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-1 font-bold text-[#E5322E] hover:underline"
+                className="inline-flex items-center gap-1 font-bold text-[#E5322E] hover:underline cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset All Filters</span>
               </button>
             </div>
           )}
-        </div>
+        </motion.div>
 
         {/* Results Counter */}
         <div className="flex items-center justify-between mb-6 text-sm text-gray-600">
@@ -314,39 +325,52 @@ export const PropertiesPage: React.FC<PropertiesPageProps> = ({
         </div>
 
         {/* Properties View */}
-        {filteredProperties.length > 0 ? (
-          <div
-            className={
-              viewMode === 'grid'
-                ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
-                : 'space-y-6'
-            }
-          >
-            {filteredProperties.map((property) => (
-              <PropertyCard
-                key={property.id}
-                property={property}
-                onViewDetails={onViewDetails}
-                onEnquire={onEnquire}
-                layout={viewMode}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20 bg-white rounded-3xl border border-gray-200 p-8 shadow-sm">
-            <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-gray-800">No properties match your current filters</h3>
-            <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
-              Try adjusting your location, price range, or property type, or click below to view all available listings.
-            </p>
-            <button
-              onClick={handleResetFilters}
-              className="mt-6 px-6 py-2.5 rounded-xl bg-[#016DAA] text-white font-bold text-sm shadow-sm hover:bg-[#015383] transition-colors"
+        <AnimatePresence mode="wait">
+          {filteredProperties.length > 0 ? (
+            <motion.div
+              key={`props-${viewMode}-${filteredProperties.length}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className={
+                viewMode === 'grid'
+                  ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'
+                  : 'space-y-6'
+              }
             >
-              Reset Filters
-            </button>
-          </div>
-        )}
+              {filteredProperties.map((property) => (
+                <PropertyCard
+                  key={property.id}
+                  property={property}
+                  onViewDetails={onViewDetails}
+                  onEnquire={onEnquire}
+                  layout={viewMode}
+                />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="props-empty"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center py-20 bg-white rounded-3xl border border-gray-200 p-8 shadow-sm"
+            >
+              <Building className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-gray-800">No properties match your current filters</h3>
+              <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">
+                Try adjusting your location, price range, or property type, or click below to view all available listings.
+              </p>
+              <button
+                onClick={handleResetFilters}
+                className="mt-6 px-6 py-2.5 rounded-xl bg-[#016DAA] text-white font-bold text-sm shadow-sm hover:bg-[#015383] transition-colors cursor-pointer"
+              >
+                Reset Filters
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

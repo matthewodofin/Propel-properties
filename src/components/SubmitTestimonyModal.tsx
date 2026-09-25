@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { X, Star, CheckCircle2, ShieldCheck, HeartHandshake, Loader2 } from 'lucide-react';
 import { TestimonialItem } from '../types';
 import { submitToFormspree } from '../services/formspree';
@@ -26,8 +27,6 @@ export const SubmitTestimonyModal: React.FC<SubmitTestimonyModalProps> = ({
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [honeypot, setHoneypot] = useState('');
-
-  if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,21 +131,39 @@ export const SubmitTestimonyModal: React.FC<SubmitTestimonyModalProps> = ({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
-      id="submit-testimony-modal-backdrop"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-2xl relative max-h-[92dvh] overflow-y-auto overscroll-contain border border-gray-100">
-        {/* Close Button */}
-        <button
-          onClick={handleReset}
-          className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center transition-colors"
-          aria-label="Close dialog"
+    <AnimatePresence>
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4"
+          id="submit-testimony-modal-backdrop"
+          role="dialog"
+          aria-modal="true"
         >
-          <X className="w-5 h-5" />
-        </button>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleReset}
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm"
+          />
+
+          {/* Modal Container with Spring Entrance */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.94, y: 16 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+            className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-5 sm:p-8 shadow-2xl relative max-h-[92dvh] overflow-y-auto overscroll-contain border border-gray-100 z-10"
+          >
+            {/* Close Button */}
+            <button
+              onClick={handleReset}
+              className="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 flex items-center justify-center transition-colors cursor-pointer"
+              aria-label="Close dialog"
+            >
+              <X className="w-5 h-5" />
+            </button>
 
         {isSuccess ? (
           <div className="text-center py-6 space-y-4">
@@ -333,10 +350,12 @@ export const SubmitTestimonyModal: React.FC<SubmitTestimonyModalProps> = ({
 
               {/* Submit CTA */}
               <div className="pt-2">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3.5 rounded-xl bg-[#016DAA] hover:bg-[#015383] text-white font-bold text-sm shadow-md transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-70"
+                  className="w-full py-3.5 rounded-xl bg-[#016DAA] hover:bg-[#015383] text-white font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2 disabled:opacity-70 cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>
@@ -346,12 +365,14 @@ export const SubmitTestimonyModal: React.FC<SubmitTestimonyModalProps> = ({
                   ) : (
                     <span>Publish Testimony</span>
                   )}
-                </button>
+                </motion.button>
               </div>
             </form>
           </div>
         )}
-      </div>
-    </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 };

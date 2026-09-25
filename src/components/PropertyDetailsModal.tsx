@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Property } from '../types';
 import { BUSINESS_INFO } from '../data/content';
 import {
@@ -31,42 +32,60 @@ export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({
   onScheduleViewing,
   onSendEnquiry,
 }) => {
-  if (!property) return null;
-
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   const nextImage = () => {
+    if (!property) return;
     setActiveImageIndex((prev) => (prev + 1) % property.images.length);
   };
 
   const prevImage = () => {
+    if (!property) return;
     setActiveImageIndex((prev) => (prev - 1 + property.images.length) % property.images.length);
   };
 
   return (
-    <div
-      id="property-details-modal"
-      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6 bg-black/75 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200"
-    >
-      <div className="bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[94dvh] overflow-y-auto shadow-2xl border border-gray-100 relative flex flex-col overscroll-contain">
-        {/* Sticky Header with Title & Close Button */}
-        <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3.5 sm:py-4 border-b border-gray-100 flex items-center justify-between">
-          <div className="flex items-center gap-2 truncate pr-4">
-            <span className="px-2.5 py-1 rounded text-[11px] font-bold uppercase bg-[#016DAA] text-white">
-              {property.status}
-            </span>
-            <span className="text-xs font-semibold text-gray-500 truncate">
-              Ref: {property.id.toUpperCase()}
-            </span>
-          </div>
-          <button
+    <AnimatePresence>
+      {property && (
+        <div
+          id="property-details-modal"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 md:p-6"
+        >
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={onClose}
-            className="p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors min-w-[40px] min-h-[40px] flex items-center justify-center"
-            aria-label="Close details"
+            className="fixed inset-0 bg-black/75 backdrop-blur-md"
+          />
+
+          {/* Modal Container */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
+            transition={{ type: 'spring', stiffness: 350, damping: 28 }}
+            className="bg-white rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[94dvh] overflow-y-auto shadow-2xl border border-gray-100 relative flex flex-col overscroll-contain z-10"
           >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+            {/* Sticky Header with Title & Close Button */}
+            <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-4 sm:px-6 py-3.5 sm:py-4 border-b border-gray-100 flex items-center justify-between">
+              <div className="flex items-center gap-2 truncate pr-4">
+                <span className="px-2.5 py-1 rounded text-[11px] font-bold uppercase bg-[#016DAA] text-white">
+                  {property.status}
+                </span>
+                <span className="text-xs font-semibold text-gray-500 truncate">
+                  Ref: {property.id.toUpperCase()}
+                </span>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors min-w-[40px] min-h-[40px] flex items-center justify-center cursor-pointer"
+                aria-label="Close details"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
         <div className="p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
           {/* Main Gallery with Thumbnails */}
@@ -247,37 +266,45 @@ export const PropertyDetailsModal: React.FC<PropertyDetailsModalProps> = ({
 
           {/* Direct CTA Action Buttons Section (Section 13) */}
           <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center gap-3">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => onScheduleViewing(property)}
               id="modal-schedule-viewing-button"
-              className="w-full sm:flex-1 py-3.5 px-5 rounded-xl bg-[#E5322E] hover:bg-[#CC2622] text-white text-sm font-bold shadow-md transition-all active:scale-95 flex items-center justify-center gap-2"
+              className="w-full sm:flex-1 py-3.5 px-5 rounded-xl bg-[#E5322E] hover:bg-[#CC2622] text-white text-sm font-bold shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <Calendar className="w-4 h-4" />
               <span>Schedule a Viewing</span>
-            </button>
+            </motion.button>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => onSendEnquiry(property)}
               id="modal-send-enquiry-button"
-              className="w-full sm:flex-1 py-3.5 px-5 rounded-xl bg-[#016DAA] hover:bg-[#015383] text-white text-sm font-bold shadow-sm transition-all active:scale-95 flex items-center justify-center gap-2"
+              className="w-full sm:flex-1 py-3.5 px-5 rounded-xl bg-[#016DAA] hover:bg-[#015383] text-white text-sm font-bold shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>Send Enquiry</span>
-            </button>
+            </motion.button>
 
-            <a
+            <motion.a
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.96 }}
               href={`https://wa.me/${BUSINESS_INFO.whatsappNumber}?text=${encodeURIComponent(
                 `Hello Propel Properties, I would like to make an enquiry about ${property.title} (${property.priceFormatted}) in ${property.area}. Please share inspection availability.`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto py-3.5 px-5 rounded-xl border border-emerald-500/40 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-bold transition-colors flex items-center justify-center gap-2"
+              className="w-full sm:w-auto py-3.5 px-5 rounded-xl border border-emerald-500/40 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-bold transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp Agent</span>
-            </a>
+            </motion.a>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
+  )}
+</AnimatePresence>
   );
 };
