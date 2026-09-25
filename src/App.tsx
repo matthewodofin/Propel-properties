@@ -18,10 +18,12 @@ import { PropertyDetailsModal } from './components/PropertyDetailsModal';
 import { PropertyEnquiryModal } from './components/PropertyEnquiryModal';
 import { ListPropertyModal } from './components/ListPropertyModal';
 import { BackendConfigModal } from './components/BackendConfigModal';
+import { BrandPreloader } from './components/BrandPreloader';
 import { SAMPLE_PROPERTIES } from './data/properties';
 import { Property, PropertyFilterState } from './types';
 
 export default function App() {
+  const [isSiteLoading, setIsSiteLoading] = useState(true);
   const [currentView, setCurrentView] = useState<'home' | 'properties' | 'about' | 'services' | 'contact'>('home');
   const [properties] = useState<Property[]>(SAMPLE_PROPERTIES);
 
@@ -117,6 +119,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans selection:bg-[#016DAA] selection:text-white">
+      {/* Brand Loading Splash Screen on Visit */}
+      <AnimatePresence>
+        {isSiteLoading && (
+          <BrandPreloader onLoaded={() => setIsSiteLoading(false)} />
+        )}
+      </AnimatePresence>
+
       {/* Top Navbar */}
       <Navbar
         currentView={currentView}
