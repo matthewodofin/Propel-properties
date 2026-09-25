@@ -254,7 +254,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           <p className="text-center sm:text-right font-medium text-gray-400">
             Powered by{' '}
-            <strong className="text-white">LearnIT Institute of Business &amp; Technology</strong>
+            <strong className="text-white">Propel Properties</strong>
           </p>
 
           <button

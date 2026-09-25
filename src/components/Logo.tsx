@@ -51,7 +51,7 @@ export const Logo: React.FC<LogoProps> = ({
 
   return (
     <div
-      className={`inline-flex items-center ${currentSize.gap} select-none ${className}`}
+      className={`inline-flex items-center ${currentSize.gap} select-none whitespace-nowrap flex-shrink-0 ${className}`}
       id="brand-logo-container"
     >
       {/* Brand Logo Image from imgur */}

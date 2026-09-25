@@ -43,13 +43,13 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Hero Headline */}
-        <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
-          Find a Property You Can Call <span className="text-[#016DAA] bg-white px-2 py-0.5 rounded-md inline-block mt-1">Home</span>
+        <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-snug pb-1">
+          Find a Property You Can Call <span className="text-[#016DAA] bg-white px-2.5 py-0.5 rounded-md inline-block">Home</span>
         </h1>
 
-        {/* Hero Subheadline */}
-        <p className="mt-4 sm:mt-5 text-sm sm:text-base md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-normal px-2">
-          Discover quality properties, land and investment opportunities with Propel Properties.
+        {/* Hero Subheadline - generous vertical spacing from headline */}
+        <p className="mt-6 sm:mt-8 text-sm sm:text-base md:text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed font-normal px-2">
+          Discover quality properties, land and investment opportunities with <strong className="text-white font-semibold">Propel Properties</strong>.
         </p>
 
         {/* CTA Buttons */}

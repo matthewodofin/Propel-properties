@@ -82,18 +82,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          {/* Brand Logo */}
-          <button
-            onClick={() => handleNavClick('home')}
-            className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#016DAA] rounded-lg p-1"
-            id="navbar-brand-button"
-            aria-label="Propel Properties Home"
-          >
-            <Logo size="md" />
-          </button>
+          {/* Brand Logo with dedicated breathing room */}
+          <div className="flex-shrink-0 mr-6 md:mr-10 lg:mr-14">
+            <button
+              onClick={() => handleNavClick('home')}
+              className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#016DAA] rounded-lg p-1"
+              id="navbar-brand-button"
+              aria-label="Propel Properties Home"
+            >
+              <Logo size="md" />
+            </button>
+          </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-7 text-[15px] font-semibold text-[#1F2937]" id="desktop-nav-menu">
+          <nav className="hidden md:flex items-center gap-5 lg:gap-7 text-[15px] font-semibold text-[#1F2937]" id="desktop-nav-menu">
             <button
               onClick={() => handleNavClick('home')}
               id="nav-link-home"
@@ -198,15 +200,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           id="mobile-nav-drawer"
           className="md:hidden border-t border-gray-100 bg-white px-4 pt-3 pb-8 space-y-3 shadow-2xl max-h-[calc(100dvh-4.5rem)] overflow-y-auto animate-in slide-in-from-top-2 duration-200"
         >
-          {/* Mobile Drawer Brand Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+          {/* Mobile Drawer Brand Header with ample breathing room */}
+          <div className="flex items-center justify-between pb-3.5 mb-2 border-b border-gray-100">
             <Logo size="sm" />
             <span className="text-[11px] font-bold text-[#016DAA] bg-[#F0F7FB] px-2.5 py-1 rounded-full uppercase tracking-wider">
-              Menu
+              Navigation
             </span>
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1.5 pt-1">
             <button
               onClick={() => handleNavClick('home')}
               className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between ${
